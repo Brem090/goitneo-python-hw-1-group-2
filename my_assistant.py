@@ -3,69 +3,52 @@ def parse_input(user_input):
     cmd = cmd.strip().lower()
     return cmd, args
 
-# Додавання нового контакту
-def add_contact(contacts, name, phone):
+
+def add_contact(args, contacts):
+    name, phone = args
     contacts[name] = phone
     return "Contact added."
 
-# Зміна номеру телефону
-def change_contact(contacts, name, new_phone):
-    if name in contacts:
-        contacts[name] = new_phone
-        return "Contact updated."
-    else:
-        return "Name not found."
 
-# Вивід номеру телефону
-def show_phone(contacts, name):
-    if name in contacts:
-        return contacts[name]
-    else:
-        return "Name not found."
-
-# Вивід всіх контактів
-def show_all(contacts):
-    if contacts:
-        result = "\n".join([f"{name}: {phone}" for name, phone in contacts.items()])
-        return result
-    else:
-        return "No contacts found."
-
-# Балакучий бот
 def main():
     contacts = {}
     print("Welcome to the assistant bot!")
     while True:
         user_input = input("Enter a command: ")
-        command, args = parse_input(user_input)
-
+        command, *args = parse_input(user_input)
         if command in ["close", "exit"]:
-            print("Good bye!")
+            print("Goodbye!")
             break
         elif command == "hello":
             print("How can I help you?")
         elif command == "add":
-            if len(args) == 2:
-                name, phone = args
-                print(add_contact(contacts, name, phone))
+            if len(args) != 2:
+                print("Incorrect number of arguments.")
             else:
-                print("Invalid command.")
+                print(add_contact(args, contacts))
         elif command == "change":
-            if len(args) == 2:
-                name, new_phone = args
-                print(change_contact(contacts, name, new_phone))
+            if len(args) != 2:
+                print("Incorrect number of arguments.")
             else:
-                print("Invalid command.")
+                name, phone = args
+                if name not in contacts:
+                    print("Contact does not exist.")
+                else:
+                    contacts[name] = phone
+                    print("Contact updated.")
         elif command == "phone":
-            if len(args) == 1:
-                name = args[0]
-                result = show_phone(contacts, name)
-                print(result)
+            if len(args) != 1:
+                print("Incorrect number of arguments.")
             else:
-                print("Invalid command.")
+                name = args[0]
+                if name not in contacts:
+                    print("Contact does not exist.")
+                else:
+                    print(contacts[name])
         elif command == "all":
-            result = show_all(contacts)
-            print(result)
+            print("List of contacts:")
+            for name, phone in contacts.items():
+                print(f"{name}: {phone}")
         else:
             print("Invalid command.")
 
