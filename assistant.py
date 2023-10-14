@@ -10,6 +10,29 @@ def add_contact(args, contacts):
     return "Contact added."
 
 
+def change_contact(args, contacts):
+    name, phone = args
+    if name not in contacts:
+        return "Contact does not exist."
+    else:
+        contacts[name] = phone
+        return "Contact updated."
+
+
+def get_phone(args, contacts):
+    name = args[0]
+    if name not in contacts:
+        return "Contact does not exist."
+    else:
+        return contacts[name]
+
+
+def get_all_contacts(contacts):
+    print("List of contacts:")
+    for name, phone in contacts.items():
+        print(f"{name}: {phone}")
+
+
 def main():
     contacts = {}
     print("Welcome to the assistant bot!")
@@ -30,25 +53,14 @@ def main():
             if len(args) != 2:
                 print("Incorrect number of arguments.")
             else:
-                name, phone = args
-                if name not in contacts:
-                    print("Contact does not exist.")
-                else:
-                    contacts[name] = phone
-                    print("Contact updated.")
+                print(change_contact(args, contacts))
         elif command == "phone":
             if len(args) != 1:
                 print("Incorrect number of arguments.")
             else:
-                name = args[0]
-                if name not in contacts:
-                    print("Contact does not exist.")
-                else:
-                    print(contacts[name])
+                print(get_phone(args, contacts))
         elif command == "all":
-            print("List of contacts:")
-            for name, phone in contacts.items():
-                print(f"{name}: {phone}")
+            print(get_all_contacts(contacts))
         else:
             print("Invalid command.")
 
